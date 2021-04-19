@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug (no funciona)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                // Esto en realidad no esta funcando, tengo que ejecutarlo de la consola con flutter run -d windows --no-sound-null-safety -v
+                // Luego desde los comandos de vscode puedo usar attach to flutter process y pasar la primera url para que vscode se conecte
+                // https://flutter.dev/docs/development/add-to-app/debugging
+                // Tambien hay que agregar --no-sound-null-safety en los args desde la config global grafica de vscode por alguna razon
+              "--no-sound-null-safety" 
+             ],
+        }
+    ]
+}
