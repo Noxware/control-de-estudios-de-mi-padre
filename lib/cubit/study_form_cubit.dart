@@ -27,4 +27,14 @@ class StudyFormCubit extends Cubit<StudyFormState> {
       addError(e, st);
     }
   }
+
+  void set({required Study newStudy}) {
+    emit(StudyFormReady(lastStudy: newStudy));
+  }
+
+  @override
+  void onChange(Change<StudyFormState> change) {
+    print(change);
+    super.onChange(change);
+  }
 }

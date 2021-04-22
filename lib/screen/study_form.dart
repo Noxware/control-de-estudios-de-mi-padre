@@ -1,6 +1,7 @@
 import 'package:control_de_estudios_de_papa/cubit/study_form_cubit.dart';
 import 'package:control_de_estudios_de_papa/cubit/study_list_cubit.dart';
 import 'package:control_de_estudios_de_papa/model/study_field.dart';
+import 'package:control_de_estudios_de_papa/screen/study_extractor_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -44,9 +45,17 @@ class _StudyFormState extends State<StudyForm> {
           await context.read<StudyListCubit>().load();
           Navigator.pop(context);
         }
+
+        if (state is StudyFormReady) {
+          final fields = state.lastStudy.fields;
+          _formKey.currentState?.patchValue({
+            for (final f in fields) f.name: f.value?.toString(),
+          });
+        }
       },
       builder: (context, state) {
         if (state is StudyFormReady) {
+          print('REBUILDING');
           return _ready(context, state);
         }
 
@@ -118,6 +127,33 @@ class _StudyFormState extends State<StudyForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Registrar estudio (${study.name})'),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) {
+              if (value == 'Extractor de valores') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return BlocProvider.value(
+                        value: context.read<StudyFormCubit>(),
+                        child: StudyExtractorForm(),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) {
+              return ['Extractor de valores'].map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: FormBuilder(
         key: _formKey,
@@ -153,7 +189,7 @@ class _StudyFormState extends State<StudyForm> {
       case StudyFieldType.number:
         return FormBuilderTextField(
           name: field.name,
-          initialValue: field.value,
+          initialValue: field.value?.toString(),
           valueTransformer: (text) =>
               text != null ? double.tryParse(text) : null,
           decoration: InputDecoration(

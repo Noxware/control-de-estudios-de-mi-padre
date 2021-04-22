@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
           studyRepository: RepositoryProvider.of<StudyRepository>(context),
         )..load(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Control de estudios de papa',
           theme: ThemeData(
             primarySwatch: Colors.purple,
